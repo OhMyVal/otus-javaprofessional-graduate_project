@@ -35,9 +35,9 @@ public class UsersController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createNewUser(@RequestBody UserDto createUserDto) {
-            User newUser = usersService.createNewUser(createUserDto);
-            logger.info("New user created");
-            return new UserDto(newUser.getId(), newUser.getName(), newUser.getEMail());
+        User newUser = usersService.createNewUser(createUserDto);
+        logger.info("New user created");
+        return new UserDto(newUser.getId(), newUser.getName(), newUser.getEMail());
     }
 
     @DeleteMapping("/{id}")
@@ -46,15 +46,17 @@ public class UsersController {
         usersService.removeUserById(id);
         logger.info("User with id = " + id + " deleted");
     }
+
     @GetMapping("/my_books/{id}")
-    public List<BookDto> showMyBooks(@PathVariable Long id){
+    public List<BookDto> showMyBooks(@PathVariable Long id) {
         logger.info("List of my books");
         return usersService.getMyBooks(id).stream().map(BOOK_TO_DTO).collect(Collectors.toList());
     }
+
     @GetMapping("/read/{user_id}/{book_id}")
     @ResponseStatus(HttpStatus.OK)
     public void readBook(
-            @PathVariable (name = "user_id") Long userId,
+            @PathVariable(name = "user_id") Long userId,
             @PathVariable(name = "book_id") Long bookId
     ) {
         usersService.readBook(userId, bookId);

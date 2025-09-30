@@ -41,15 +41,15 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable Long id) {
-            return booksService.getBookById(id).map(BOOK_TO_DTO).get();
+        return booksService.getBookById(id).map(BOOK_TO_DTO).get();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto createNewBook(@RequestBody BookDto createBookDto) {
-            Book newBook = booksService.createNewBook(createBookDto);
-            logger.info("New book is created");
-            return new BookDto(newBook.getId(), newBook.getAuthor(), newBook.getTitle(), newBook.getAvailable());
+        Book newBook = booksService.createNewBook(createBookDto);
+        logger.info("New book is created");
+        return new BookDto(newBook.getId(), newBook.getAuthor(), newBook.getTitle(), newBook.getAvailable());
     }
 
     @DeleteMapping("/{id}")
@@ -60,13 +60,13 @@ public class BooksController {
     }
 
     @GetMapping("/my_readers/{id}")
-    public List<UserDto> showMyReaders(@PathVariable Long id){
+    public List<UserDto> showMyReaders(@PathVariable Long id) {
         logger.info("List of my readers");
         return booksService.getMyReaders(id).stream().map(USER_TO_DTO).collect(Collectors.toList());
     }
 
     @GetMapping("/make_available/{id}")
-    public void makeBookAvailable(@PathVariable Long id){
+    public void makeBookAvailable(@PathVariable Long id) {
         booksService.makeAvailable(id);
         logger.info("Book with id = " + id + " set available");
     }

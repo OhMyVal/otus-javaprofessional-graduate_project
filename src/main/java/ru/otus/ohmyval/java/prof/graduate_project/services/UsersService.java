@@ -39,8 +39,8 @@ public class UsersService {
     }
 
     public List<Book> getMyBooks(Long id) {
-        Optional <User> user = usersRepository.findById(id);
-        if(user.isPresent()) return user.get().getBooks();
+        Optional<User> user = usersRepository.findById(id);
+        if (user.isPresent()) return user.get().getBooks();
         return null;
     }
 

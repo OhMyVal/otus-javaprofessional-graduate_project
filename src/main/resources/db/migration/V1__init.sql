@@ -1,14 +1,14 @@
 CREATE SCHEMA IF NOT EXISTS graduate_project_library;
 
 DROP TABLE IF EXISTS books CASCADE;
-CREATE TABLE books (id bigserial PRIMARY KEY, author VARCHAR(255), title VARCHAR(255), CONSTRAINT books_unique UNIQUE (title, author));
-INSERT INTO books (author, title) VALUES
-('Оруэлл', '1984'),
-('Оруэлл', 'Скотный двор'),
-('Теккерей', 'Ярмарка тщеславия'),
-('Брэдбери', 'Вино из одуванчиков'),
-('Браун', 'Ангелы и демоны'),
-('Ладлем', 'Личность Борна');
+CREATE TABLE books (id bigserial PRIMARY KEY, author VARCHAR(255), title VARCHAR(255), available BOOLEAN, CONSTRAINT books_unique UNIQUE (title, author));
+INSERT INTO books (author, title, available) VALUES
+('Оруэлл', '1984', true),
+('Оруэлл', 'Скотный двор', true),
+('Теккерей', 'Ярмарка тщеславия', true),
+('Брэдбери', 'Вино из одуванчиков', true),
+('Браун', 'Ангелы и демоны', true),
+('Ладлем', 'Личность Борна', true);
 
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (id bigserial PRIMARY KEY, first_name VARCHAR(255), e_mail VARCHAR(255), CONSTRAINT users_unique UNIQUE (e_mail));

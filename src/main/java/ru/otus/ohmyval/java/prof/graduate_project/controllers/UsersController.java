@@ -24,7 +24,7 @@ public class UsersController {
     private static Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     private static final Function<User, UserDto> USER_TO_DTO = i -> new UserDto(i.getId(), i.getName(), i.getEMail());
-    private static final Function<Book, BookDto> BOOK_TO_DTO = i -> new BookDto(i.getId(), i.getAuthor(), i.getTitle());
+    private static final Function<Book, BookDto> BOOK_TO_DTO = i -> new BookDto(i.getId(), i.getAuthor(), i.getTitle(), i.getAvailable());
 
     @GetMapping
     public List<UserDto> getAllUsers() {
@@ -42,24 +42,22 @@ public class UsersController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String deleteUserById(@PathVariable Long id) {
+    public void deleteUserById(@PathVariable Long id) {
         usersService.removeUserById(id);
         logger.info("User with id = " + id + " deleted");
-        return "\"User with id = \" + id + \" deleted\"";
     }
     @GetMapping("/my_books/{id}")
     public List<BookDto> showMyBooks(@PathVariable Long id){
         logger.info("List of my books");
         return usersService.getMyBooks(id).stream().map(BOOK_TO_DTO).collect(Collectors.toList());
     }
-    @GetMapping("/my_books/{user_id}/{book_id}")
+    @GetMapping("/read/{user_id}/{book_id}")
     @ResponseStatus(HttpStatus.OK)
-    public String readBook(
+    public void readBook(
             @PathVariable (name = "user_id") Long userId,
             @PathVariable(name = "book_id") Long bookId
     ) {
         usersService.readBook(userId, bookId);
         logger.info("User id = " + userId + " read book id = " + bookId);
-        return "\"User id = \" + userId + \" read book id = \" + bookId";
     }
 }

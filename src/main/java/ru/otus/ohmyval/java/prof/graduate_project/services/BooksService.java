@@ -26,7 +26,7 @@ public class BooksService {
 
     @Transactional
     public Book createNewBook(BookDto bookDto){
-        Book book = new Book(null, bookDto.author(), bookDto.title());
+        Book book = new Book(null, bookDto.author(), bookDto.title(), bookDto.available());
         return booksRepository.save(book);
     }
 
@@ -38,12 +38,32 @@ public class BooksService {
     }
 
     @Transactional
+    public List<Book> getAvailableBooks() {
+        List<Book> result = new ArrayList<>();
+        for (Book book : booksRepository.findAll()) {
+            if (book.getAvailable()) result.add(book);
+        }
+        return result;
+    }
+
+    @Transactional
     public void removeBook(Long id) {
         booksRepository.deleteById(id);
     }
 
+    @Transactional
     public List<User> getMyReaders(Long id) {
         Optional <Book> book = booksRepository.findById(id);
-        return book.get().getUsers();
+        if (book.isPresent()) return book.get().getUsers();
+        return null;
+    }
+
+    @Transactional
+    public void makeAvailable(Long id) {
+        Optional<Book> book = booksRepository.findById(id);
+        if (book.isPresent()) {
+            book.get().setAvailable(true);
+            booksRepository.save(book.get());
+        }
     }
 }

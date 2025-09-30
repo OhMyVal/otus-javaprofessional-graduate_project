@@ -26,6 +26,9 @@ public class Book {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "available")
+    public Boolean available;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "books_readers",
@@ -34,10 +37,16 @@ public class Book {
     )
     private List<User> users;
 
-    public Book(Long id, String author, String title) {
+//    public Boolean isAvailable() {
+//        return available != null ? available : true;
+//    }
+
+
+    public Book(Long id, String author, String title, Boolean available) {
         this.id = id;
         this.author = author;
         this.title = title;
+        this.available = available;
     }
 
     @Override

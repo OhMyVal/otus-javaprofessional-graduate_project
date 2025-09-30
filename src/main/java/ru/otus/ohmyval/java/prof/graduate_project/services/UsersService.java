@@ -40,13 +40,21 @@ public class UsersService {
 
     public List<Book> getMyBooks(Long id) {
         Optional <User> user = usersRepository.findById(id);
-        return user.get().getBooks();
+        if(user.isPresent()) return user.get().getBooks();
+        return null;
     }
 
+    @Transactional
     public void readBook(Long userId, Long bookId) {
-        Optional <User> user = usersRepository.findById(userId);
-        Optional <Book> book = booksRepository.findById(bookId);
-        user.get().getBooks().add(book.get());
-        usersRepository.save(user.get());
+        Optional<User> user = usersRepository.findById(userId);
+        if (user.isPresent()) {
+            Optional<Book> book = booksRepository.findById(bookId);
+            if (book.isPresent() && book.get().getAvailable()) {
+                user.get().getBooks().add(book.get());
+                usersRepository.save(user.get());
+                book.get().setAvailable(false);
+                booksRepository.save(book.get());
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ public class BooksController {
 
     private static Logger logger = LoggerFactory.getLogger(BooksController.class);
 
-    private static final Function<Book, BookDto> BOOK_TO_DTO = i -> new BookDto(i.getId(), i.getAuthor(), i.getTitle());
+    private static final Function<Book, BookDto> BOOK_TO_DTO = i -> new BookDto(i.getId(), i.getAuthor(), i.getTitle(), i.getAvailable());
 
     private static final Function<User, UserDto> USER_TO_DTO = i -> new UserDto(i.getId(), i.getName(), i.getEMail());
 
@@ -31,6 +31,12 @@ public class BooksController {
     public List<BookDto> getAllBooks() {
         logger.info("List of all books");
         return booksService.getAllBooks().stream().map(BOOK_TO_DTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/available")
+    public List<BookDto> getAvailableBooks() {
+        logger.info("List of available books");
+        return booksService.getAvailableBooks().stream().map(BOOK_TO_DTO).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -42,20 +48,26 @@ public class BooksController {
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto createNewBook(@RequestBody BookDto createBookDto) {
             Book newBook = booksService.createNewBook(createBookDto);
-            return new BookDto(newBook.getId(), newBook.getAuthor(), newBook.getTitle());
+            logger.info("New book is created");
+            return new BookDto(newBook.getId(), newBook.getAuthor(), newBook.getTitle(), newBook.getAvailable());
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String deleteBookById(@PathVariable Long id) {
+    public void deleteBookById(@PathVariable Long id) {
         booksService.removeBook(id);
         logger.info("Book with id = " + id + " deleted");
-        return "\"Book with id = \" + id + \" deleted\"";
     }
 
     @GetMapping("/my_readers/{id}")
     public List<UserDto> showMyReaders(@PathVariable Long id){
         logger.info("List of my readers");
         return booksService.getMyReaders(id).stream().map(USER_TO_DTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/make_available/{id}")
+    public void makeBookAvailable(@PathVariable Long id){
+        booksService.makeAvailable(id);
+        logger.info("Book with id = " + id + " set available");
     }
 }

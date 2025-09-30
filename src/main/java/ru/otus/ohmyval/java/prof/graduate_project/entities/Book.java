@@ -1,7 +1,6 @@
 package ru.otus.ohmyval.java.prof.graduate_project.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,6 @@ import java.util.List;
         @UniqueConstraint(columnNames = {"author", "title"}))
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +34,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> users;
-
-//    public Boolean isAvailable() {
-//        return available != null ? available : true;
-//    }
-
 
     public Book(Long id, String author, String title, Boolean available) {
         this.id = id;

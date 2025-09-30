@@ -7,7 +7,6 @@ import ru.otus.ohmyval.java.prof.graduate_project.dtos.BookDto;
 import ru.otus.ohmyval.java.prof.graduate_project.entities.Book;
 import ru.otus.ohmyval.java.prof.graduate_project.entities.User;
 import ru.otus.ohmyval.java.prof.graduate_project.repositories.BooksRepository;
-import ru.otus.ohmyval.java.prof.graduate_project.repositories.UsersRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +17,12 @@ import java.util.Optional;
 public class BooksService {
     private final BooksRepository booksRepository;
 
-    private final UsersRepository usersRepository;
-
     public Optional<Book> getBookById(Long id) {
         return booksRepository.findById(id);
     }
 
     @Transactional
-    public Book createNewBook(BookDto bookDto){
+    public Book createNewBook(BookDto bookDto) {
         Book book = new Book(null, bookDto.author(), bookDto.title(), bookDto.available());
         return booksRepository.save(book);
     }
@@ -53,7 +50,7 @@ public class BooksService {
 
     @Transactional
     public List<User> getMyReaders(Long id) {
-        Optional <Book> book = booksRepository.findById(id);
+        Optional<Book> book = booksRepository.findById(id);
         if (book.isPresent()) return book.get().getUsers();
         return null;
     }
